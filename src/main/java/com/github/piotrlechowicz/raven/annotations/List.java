@@ -1,4 +1,4 @@
-package com.github.piotrlechowicz.raven.parser;
+package com.github.piotrlechowicz.raven.annotations;
 
 import java.lang.annotation.*;
 
