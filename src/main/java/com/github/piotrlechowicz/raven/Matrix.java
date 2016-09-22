@@ -4,16 +4,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class which represents matrix - list of list of parameterised value T
- * 
- * @author plechowicz
+ * Class which represents matrix - list of list of parametrized value T
  *
  * @param <T> parameterised type for matrix
- * 
+ * @author plechowicz
  */
 class Matrix<T> {
-	private List<List<T>> matrix;
-	private int nrOfRows;
+
+	private final List<List<T>> matrix;
+	private final int nrOfRows;
 
 	public Matrix(List<List<T>> matrix) {
 		this.matrix = matrix;
@@ -22,7 +21,7 @@ class Matrix<T> {
 
 	/**
 	 * Gets value in row and column
-	 * 
+	 *
 	 * @param row index of row
 	 * @param col index of column
 	 * @return value T
@@ -36,7 +35,7 @@ class Matrix<T> {
 
 	/**
 	 * Gets values in row
-	 * 
+	 *
 	 * @param row index of row
 	 * @return list of values T
 	 */
@@ -49,7 +48,7 @@ class Matrix<T> {
 
 	/**
 	 * Gets value in row, starting from column till end of row
-	 * 
+	 *
 	 * @param row index of row
 	 * @param col index of column
 	 * @return list of values T
@@ -64,9 +63,10 @@ class Matrix<T> {
 
 	/**
 	 * Gets value in row, starting from startCol till endCol
-	 * @param row index of row
+	 *
+	 * @param row      index of row
 	 * @param startCol index of starting column
-	 * @param endCol index of ending column
+	 * @param endCol   index of ending column
 	 * @return list of values T
 	 */
 	List<T> getRow(int row, int startCol, int endCol) {
@@ -79,14 +79,14 @@ class Matrix<T> {
 
 	/**
 	 * Gets value in column, starting from row till end of the column
-	 * 
+	 *
 	 * @param row index of row
 	 * @param col index of column
 	 * @return list of values T
 	 */
 	List<T> getColumn(int row, int col) {
 		if (isInCorrectRange(row, col)) {
-			List<T> column = new LinkedList<T>();
+			List<T> column = new LinkedList<>();
 			for (List<T> slicedLine : matrix.subList(row, nrOfRows)) {
 				column.add(slicedLine.get(col));
 			}
@@ -97,10 +97,10 @@ class Matrix<T> {
 
 	/**
 	 * Gets value in column, starting from startRow till endRow
-	 * 
+	 *
 	 * @param startRow index of starting row
-	 * @param endRow index of ending row
-	 * @param col index of column
+	 * @param endRow   index of ending row
+	 * @param col      index of column
 	 * @return list of values T
 	 */
 	List<T> getColumn(int startRow, int endRow, int col) {
@@ -116,7 +116,7 @@ class Matrix<T> {
 
 	/**
 	 * Gets part of matrix starting from column and row till end of the matrix
-	 * 
+	 *
 	 * @param row index of row
 	 * @param col index of column
 	 * @return list of list of values T
@@ -135,10 +135,10 @@ class Matrix<T> {
 
 	/**
 	 * Gets part of matrix starting from startCol and row till endCol and last row
-	 * 
-	 * @param row index of row
+	 *
+	 * @param row      index of row
 	 * @param startCol index of starting column
-	 * @param endCol index of ending column
+	 * @param endCol   index of ending column
 	 * @return list of list of values T
 	 */
 	List<List<T>> getRowsAndColsInRange(int row, int startCol, int endCol) {
@@ -157,14 +157,13 @@ class Matrix<T> {
 	 * Gets part of matrix starting from startCol and row till endCol and last row
 	 *
 	 * @param startRow index of starting row
-	 * @param endRow index of ending row
+	 * @param endRow   index of ending row
 	 * @param startCol index of starting column
 	 * @return list of list of values T
 	 */
 	List<List<T>> getRowsInRangeAndCols(int startRow, int endRow, int startCol) {
 		if (isInCorrectRange(startRow, endRow, startCol, startCol)) {
 			List<List<T>> slicedMatrix = new LinkedList<>();
-
 			List<List<T>> rows = matrix.subList(startRow, endRow);
 			for (List<T> line : rows) {
 				slicedMatrix.add(line.subList(startCol, line.size()));
@@ -176,11 +175,11 @@ class Matrix<T> {
 
 	/**
 	 * Gets part of matrix starting from startCol and startRow till endCol and endRow
-	 * 
+	 *
 	 * @param startRow index of starting row
-	 * @param endRow index of ending row
+	 * @param endRow   index of ending row
 	 * @param startCol index of starting column
-	 * @param endCol index of ending column
+	 * @param endCol   index of ending column
 	 * @return list of list of values T
 	 */
 	List<List<T>> getRowsInRangeAndColsInRange(int startRow, int endRow, int startCol, int endCol) {
@@ -196,9 +195,7 @@ class Matrix<T> {
 	}
 
 	private boolean isInCorrectRange(int row) {
-		if (row >= 0 && row < nrOfRows)
-			return true;
-		return false;
+		return row >= 0 && row < nrOfRows;
 	}
 
 	private boolean isInCorrectRange(int row, int col) {
@@ -218,10 +215,12 @@ class Matrix<T> {
 	}
 
 	private boolean isInCorrectRange(int startRow, int endRow, int startCol, int endCol) {
-		if (startRow >= endRow || startCol >= endCol)
+		if (startRow >= endRow || startCol >= endCol) {
 			return false;
-		if (startRow >= 0 && endRow <= nrOfRows && startCol >= 0 && endCol <= matrix.get(startRow).size())
+		}
+		if (startRow >= 0 && endRow <= nrOfRows && startCol >= 0 && endCol <= matrix.get(startRow).size()) {
 			return true;
+		}
 		return false;
 	}
 }

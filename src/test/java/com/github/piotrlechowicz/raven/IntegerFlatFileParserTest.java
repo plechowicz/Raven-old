@@ -1,24 +1,15 @@
 package com.github.piotrlechowicz.raven;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
-import static org.powermock.api.mockito.PowerMockito.when;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -34,7 +25,7 @@ import com.github.piotrlechowicz.raven.annotations.PositionInFile;
 @PrepareForTest(IntegerFlatFileParser.class)
 public class IntegerFlatFileParserTest {
 
-	private IntegerFlatFileParser flatFileParser = PowerMockito.spy(new IntegerFlatFileParser());
+	private final IntegerFlatFileParser flatFileParser = PowerMockito.spy(new IntegerFlatFileParser());
 	private ClassToParse parsedClass;
 
 

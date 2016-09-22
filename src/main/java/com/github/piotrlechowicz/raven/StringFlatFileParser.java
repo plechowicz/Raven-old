@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author plechowicz
  */
-public class StringFaltFileParser extends FlatFileParser<String> {
+public class StringFlatFileParser extends FlatFileParser<String> {
 
 	@Override
 	protected List<List<String>> createMatrixOfValues(List<String> rawFileContent) {
