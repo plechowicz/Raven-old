@@ -13,35 +13,62 @@ import com.github.piotrlechowicz.raven.annotations.ManyRows;
 import com.github.piotrlechowicz.raven.annotations.PositionInFile;
 
 /**
- * Class created to parse different type of files. It contains abstract
- * method: {@code List<List<?>> createMatrixOfValues(List<String> rawFileContent)} which has to be
- * defined. It determines how the lines of the file will be interpreted. <br/>
- * The parameter <code>X</code> describes to which type values in file should be parsed.
+ * Abstract class which create class instance and initialize fields based on provided text file and annotations.<br/>
+ * Text file is parsed into matrix (two dimensional array) of values according to implementation of abstract
+ * method: {@code List<List<X>> createMatrixOfValues(List<String> rawFileContent)}. <br/>
+ * The parameter <code>X</code> describes to which type all values in the file should be parsed.
+ * <p>
+ * Fields which should be initialized has to be annotated with {@link PositionInFile}
+ * </p>
+ * <p>
+ * <p>
+ * <b>Example:</b><br/>
+ * The method {@link FlatFileParser#createMatrixOfValues(List)} is implemented to parse integers (see
+ * {@link IntegerFlatFileParser})
+ * <br/><br/>
+ * Text file has following structure:<br/>
+ * <pre>
+ * 1 2 3
+ * 4 5 6
+ *     </pre>
+ * {@code
+ * There is created class:<br/>
+ * public class ExampleClass {
  *
  * @author Piotr Lechowicz
+ * @PositionInFile(row = 1, col = 2)
+ * int value;
+ * }
+ * }
+ * after invoking {@link FlatFileParser#parseFile(Class, String)} with arguments {@code (ExampleClass.class, path}
+ * the {@code value} will be set to 6.
+ * </p>
+ * <p>
+ *     To parse list of values use annotations {@link ManyCols} and/or {@link ManyRows}
+ * </p>
  */
 public abstract class FlatFileParser<X> {
 
-	public static final int PARSE_TILL_END = -1;
-
 	private static final Logger log = Logger.getLogger(FlatFileParser.class);
 
-	private List<List<X>> matrix;
-
-	public <T> T parseFile(Class<T> clazz, String path) throws IOException {
+	/**
+	 * Creates class instance and initializes fields with values in a text file pointed by the path. Values in text file are selected
+	 * according to annotations.
+	 *
+	 * @param clazz Class which instance will be created
+	 * @param path  path of text file
+	 * @param <T>   class which is going to be created
+	 * @return initialized instance of class
+	 * @throws IOException when file does not exist
+	 */
+	public final <T> T parseFile(Class<T> clazz, String path) throws IOException {
 
 		InstanceBuilder<T> builder;
 
-		try {
-			builder = new InstanceBuilder<>(clazz);
-		} catch (InstantiationException | IllegalAccessException e) {
-			log.warn("Unable to create instance of: " + clazz);
-			throw new RuntimeException(e.getCause());
-		}
+		builder = new InstanceBuilder<>(clazz);
 
 		List<String> rawFileContent = getFileContent(path);
-		matrix = createMatrixOfValues(rawFileContent);
-		builder.setMatrix(matrix);
+		builder.setMatrix(createMatrixOfValues(rawFileContent));
 
 		for (Field field : clazz.getDeclaredFields()) {
 			PositionInFile annotation = field.getAnnotation(PositionInFile.class);
@@ -53,13 +80,15 @@ public abstract class FlatFileParser<X> {
 	}
 
 	/**
+	 * Defines how lines of text in a file are parsed to the matrix of values.
+	 *
 	 * @param rawFileContent file content as a list of strings
 	 * @return file content as matrix; outer list is a row, inner is a column
 	 */
 	protected abstract List<List<X>> createMatrixOfValues(List<String> rawFileContent);
 
 	private List<String> getFileContent(String path) throws IOException {
-		List<String> fileContent = null;
+		List<String> fileContent;
 		try {
 			fileContent = FileUtils.readLines(new File(path));
 		} catch (IOException e) {
@@ -72,15 +101,6 @@ public abstract class FlatFileParser<X> {
 		return fileContent;
 	}
 
-	private <T> T getNewInstance(Class<T> clazz) {
-		try {
-			return clazz.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			log.warn("Unable to create instance of: " + clazz);
-			throw new RuntimeException(e.getCause());
-		}
-	}
-
 
 	/**
 	 * Inner class to help in creation of generic class form parsed flat file
@@ -90,22 +110,22 @@ public abstract class FlatFileParser<X> {
 	 */
 	private class InstanceBuilder<T> {
 
-		private T t;
+		private final T t;
 		private Matrix<X> matrix;
 
-		public InstanceBuilder(Class<T> clazz) throws InstantiationException, IllegalAccessException {
-			t = clazz.newInstance();
+		InstanceBuilder(Class<T> clazz) {
+			t = getNewInstance(clazz);
 		}
 
-		public T getInstance() {
+		T getInstance() {
 			return t;
 		}
 
-		public void setMatrix(List<List<X>> matrix) {
-			this.matrix = new Matrix<X>(matrix);
+		void setMatrix(List<List<X>> matrix) {
+			this.matrix = new Matrix<>(matrix);
 		}
 
-		public void initializeField(Field field, PositionInFile position) {
+		void initializeField(Field field, PositionInFile position) {
 			field.setAccessible(true);
 
 			ManyRows manyRows = field.getAnnotation(ManyRows.class);
@@ -125,7 +145,7 @@ public abstract class FlatFileParser<X> {
 					}
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
-				log.warn("Field cannot be properly set: " + field + " error: " + e);
+				log.warn("Field=" + field.getName() + " cannot be properly set; " + ", row=" + position.row() + ", col=" + position.col());
 			}
 		}
 
@@ -137,7 +157,7 @@ public abstract class FlatFileParser<X> {
 			int startRow = position.row();
 			int startCol = position.col();
 			int colSize = manyCols.value();
-			if (colSize == PARSE_TILL_END)
+			if (colSize == ManyCols.PARSE_TILL_END)
 				field.set(t, matrix.getRow(startRow, startCol));
 			else
 				field.set(t, matrix.getRow(startRow, startCol, startCol + colSize));
@@ -147,7 +167,7 @@ public abstract class FlatFileParser<X> {
 			int startRow = position.row();
 			int startCol = position.col();
 			int rowSize = manyRows.value();
-			if (rowSize == PARSE_TILL_END) {
+			if (rowSize == ManyRows.PARSE_TILL_END) {
 				field.set(t, matrix.getColumn(startRow, startCol));
 			} else {
 				field.set(t, matrix.getColumn(startRow, startRow + rowSize, startCol));
@@ -160,18 +180,27 @@ public abstract class FlatFileParser<X> {
 			int rowSize = manyRows.value();
 			int colSize = manyCols.value();
 
-			if (rowSize == PARSE_TILL_END) {
-				if (colSize == PARSE_TILL_END) {
+			if (rowSize == ManyRows.PARSE_TILL_END) {
+				if (colSize == ManyCols.PARSE_TILL_END) {
 					field.set(t, matrix.getRowsAndCols(startRow, startCol));
 				} else {
 					field.set(t, matrix.getRowsAndColsInRange(startRow, startCol, startCol + colSize));
 				}
 			} else {
-				if (colSize == PARSE_TILL_END) {
+				if (colSize == ManyCols.PARSE_TILL_END) {
 					field.set(t, matrix.getRowsInRangeAndCols(startRow, startRow + rowSize, startCol));
 				} else {
 					field.set(t, matrix.getRowsInRangeAndColsInRange(startRow, startRow + rowSize, startCol, startCol + colSize));
 				}
+			}
+		}
+
+		private T getNewInstance(Class<T> clazz) {
+			try {
+				return clazz.newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				log.warn("Unable to create instance of: " + clazz);
+				throw new RuntimeException(e.getCause());
 			}
 		}
 	}

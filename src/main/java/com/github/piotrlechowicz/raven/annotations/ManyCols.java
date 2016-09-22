@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.github.piotrlechowicz.raven.FlatFileParser;
-
 /**
  * Annotates that filed has more than one value in columns. If parameter value is not specified, it means that the field should be parsed
  * from starting position till the last row.
@@ -20,5 +18,7 @@ public @interface ManyCols {
 	/**
 	 * @return size of a type (if it is -1 it is parsed to the last row.)
 	 */
-	int value() default FlatFileParser.PARSE_TILL_END;
+	int value() default PARSE_TILL_END;
+
+	int PARSE_TILL_END = -1;
 }

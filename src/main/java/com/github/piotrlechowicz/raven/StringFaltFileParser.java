@@ -5,11 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Concrete implementation of FlatFileParser. It overrides the method {@code createMatrixOfValues} to work with strings. Lines are separated with space sign.
+ * Concrete implementation of FlatFileParser. It overrides the method {@code FlatFileParser{@link #createMatrixOfValues(List)}} to
+ * work with strings. <br/>
+ * Columns in file should be separated with space sign.<br/>
+ * Rows should be separated with return sign.
  *
  * @author plechowicz
  */
-public final class StringFaltFileParser extends FlatFileParser<String> {
+public class StringFaltFileParser extends FlatFileParser<String> {
 
 	@Override
 	protected List<List<String>> createMatrixOfValues(List<String> rawFileContent) {

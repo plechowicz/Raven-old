@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Concrete implementation of FlatFileParser. It overrides the method {@code createMatrixOfValues}
- * to work with integers.
+ * Concrete implementation of FlatFileParser. It overrides the method {@code FlatFileParser{@link #createMatrixOfValues(List)}}
+ * to parse strings to integers.</br>
+ * Columns in file should be separated with space sign.<br/>
+ * Rows in file should be separated with return sign.
  *
  * @author plechowicz
  */
-public final class IntegerFlatFileParser extends FlatFileParser<Integer> {
+public class IntegerFlatFileParser extends FlatFileParser<Integer> {
 
 	@Override
 	protected List<List<Integer>> createMatrixOfValues(List<String> rawFileContent) {
