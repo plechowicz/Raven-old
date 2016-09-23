@@ -13,12 +13,12 @@ import com.github.piotrlechowicz.raven.annotations.ManyRows;
 import com.github.piotrlechowicz.raven.annotations.PositionInFile;
 
 /**
- * Abstract class which create class instance and initialize fields based on provided text file and annotations.<br/>
+ * Abstract class which creates class instance and initializes fields based on provided text file and annotations.<br/>
  * Text file is parsed into matrix (two dimensional array) of values according to implementation of abstract
  * method: {@code List<List<X>> createMatrixOfValues(List<String> rawFileContent)}. <br/>
  * The parameter <code>X</code> describes to which type all values in the file should be parsed.
  * <p>
- * Fields which should be initialized has to be annotated with {@link PositionInFile}
+ * Fields which should be initialized have to be annotated with {@link PositionInFile}
  * </p>
  * <p>
  * <p>
@@ -31,21 +31,22 @@ import com.github.piotrlechowicz.raven.annotations.PositionInFile;
  * 1 2 3
  * 4 5 6
  *     </pre>
- * {@code
- * There is created class:<br/>
- * public class ExampleClass {
- *
- * @author Piotr Lechowicz
- * @PositionInFile(row = 1, col = 2)
- * int value;
- * }
- * }
- * after invoking {@link FlatFileParser#parseFile(Class, String)} with arguments {@code (ExampleClass.class, path}
- * the {@code value} will be set to 6.
+ * <p>
+ * There is created a class:<br/>
+ * <pre>{@code
+ *   public class ExampleClass {
+ *      @literal @PositionInFile(row = 1, col = 2)
+ *       int value;
+ *   }}
+ * </pre>
+ * After invoking {@link FlatFileParser#parseFile(Class, String)} with arguments {@code (ExampleClass.class, path)}
+ * the field "{@code value}" will be set to 6.
  * </p>
  * <p>
- *     To parse list of values use annotations {@link ManyCols} and/or {@link ManyRows}
+ * To parse a list of values instead of a single value, use annotations {@link ManyCols} and/or {@link ManyRows}
  * </p>
+ *
+ * @author Piotr Lechowicz
  */
 public abstract class FlatFileParser<X> {
 
