@@ -65,9 +65,26 @@ public abstract class FlatFileParser<X> {
 	public final <T> T parseFile(Class<T> clazz, String path) throws IOException {
 
 		InstanceBuilder<T> builder;
-
 		builder = new InstanceBuilder<>(clazz);
+		return parseFile(builder, clazz, path);
+	}
 
+	/**
+	 * Initializes class instance's fields with values in a text file pointed by the path. Values in text file are
+	 * selected according to annotations.
+	 *
+	 * @param instance Instance which is going to be initialized
+	 * @param path     path of text file
+	 * @param <T>      class which is going to be initialized
+	 * @return initialized instance
+	 * @throws IOException when file does not exist
+	 */
+	public final <T> T parseFile(T instance, String path) throws IOException {
+		InstanceBuilder<T> builder = new InstanceBuilder<T>(instance);
+		return parseFile(builder, (Class<T>) instance.getClass(), path);
+	}
+
+	private final <T> T parseFile(InstanceBuilder<T> builder, Class<T> clazz, String path) throws IOException {
 		List<String> rawFileContent = getFileContent(path);
 		builder.setMatrix(createMatrixOfValues(rawFileContent));
 
@@ -114,8 +131,13 @@ public abstract class FlatFileParser<X> {
 		private final T t;
 		private Matrix<X> matrix;
 
+
 		InstanceBuilder(Class<T> clazz) {
 			t = getNewInstance(clazz);
+		}
+
+		InstanceBuilder(T instance) {
+			this.t = instance;
 		}
 
 		T getInstance() {
