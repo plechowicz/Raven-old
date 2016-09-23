@@ -6,7 +6,7 @@
 
     <groupId>com.github.piotrlechowicz</groupId>
     <artifactId>raven</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <name>Raven</name>
 
@@ -16,6 +16,19 @@
             <email>piotr.tobiasz.lechowicz@gmail.com</email>
         </developer>
     </developers>
+
+	<distributionManagement>
+		<repository>
+			<id>armadillo</id>
+			<name>GitHub Artifactory Releases Maven Repository</name>
+			<url>https://github.com/piotrlechowicz/armadillo/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>armadillo-snapshots</id>
+			<name>GitHub Artifactory Snapshot Maven Repository</name>
+			<url>https://github.com/piotrlechowicz/armadillo/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
     <properties>
         <jdk.version>1.8</jdk.version>
@@ -27,23 +40,24 @@
         <log4j.version>1.2.17</log4j.version>
         <mockito.version>1.10.19</mockito.version>
         <commons-io.version>2.4</commons-io.version>
-        <guava.version>19.0</guava.version>
-        <slf4j-log4j12.version>1.7.21</slf4j-log4j12.version>
-        <slf4j-api.version>1.5.6</slf4j-api.version>
     </properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -58,6 +72,12 @@
 			<artifactId>powermock-api-mockito</artifactId>
 			<version>1.6.4</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
