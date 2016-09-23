@@ -16,11 +16,11 @@ public class StringFlatFileParser extends FlatFileParser<String> {
 
 	@Override
 	protected List<List<String>> createMatrixOfValues(List<String> rawFileContent) {
-		List<List<String>> rows = new ArrayList<>();
+		List<List<String>> matrix = new ArrayList<>();
 		for (String line : rawFileContent) {
 			String[] split = line.split("\\s+");
-			rows.add(Arrays.asList(split));
+			matrix.add(Arrays.asList(split));
 		}
-		return rows;
+		return matrix;
 	}
 }

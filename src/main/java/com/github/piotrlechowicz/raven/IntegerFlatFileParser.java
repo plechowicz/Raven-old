@@ -16,16 +16,16 @@ public class IntegerFlatFileParser extends FlatFileParser<Integer> {
 
 	@Override
 	protected List<List<Integer>> createMatrixOfValues(List<String> rawFileContent) {
-		List<List<Integer>> rows = new ArrayList<>();
+		List<List<Integer>> matrix = new ArrayList<>();
 		for (String line : rawFileContent) {
-			List<Integer> col = new ArrayList<>();
+			List<Integer> row = new ArrayList<>();
 			Scanner scanner = new Scanner(line);
 			while (scanner.hasNextInt()) {
-				col.add(scanner.nextInt());
+				row.add(scanner.nextInt());
 			}
 			scanner.close();
-			rows.add(col);
+			matrix.add(row);
 		}
-		return rows;
+		return matrix;
 	}
 }
