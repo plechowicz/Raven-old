@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates that filed has more than one value in row. If parameter value is not specified, it means that the field should be parsed
- * from starting position till the last column.
+ * Annotates that filed should be initialized with more than one row. If parameter value is not specified, it means that the field should
+ * be parsed from a starting position till the last row.
  *
  * @author Piotr Lechowicz
  */

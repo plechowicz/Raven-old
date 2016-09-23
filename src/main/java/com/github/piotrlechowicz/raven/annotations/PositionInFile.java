@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotates value of field in the text file
+ * Annotates value of a field in provided text file
  *<br><br>
  * {@link PositionInFile#row()} defines row in text file <br/>
  * {@link PositionInFile#col()} defines col in text file<br/>
  *
  *<br>
- *     If values are not provided, the default value 0 is taken.
+ *     If values are not provided, the value for row and col is equal to 0.
  *<p>
  *<b>Example</b>
  * Text file:
@@ -25,13 +25,13 @@ import java.lang.annotation.Target;
  * Example class :
  * <pre>
  * {@code public class ... {
- *      @literal @PositionInFile(col = 3, row = 1)
+ *      @literal @PositionInFile(col = 1, row = 3)
  *       int value;
  *   }
  * }
  * </pre>
  *
- * Defines that field "{@code value}" will be 8.
+ * Denoets that field "{@code value}" will be initialized with a value 8 (1st column, 3st row in a file).
  *
  *</p>
  * @author Piotr Lechowicz
