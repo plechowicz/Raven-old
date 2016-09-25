@@ -4,17 +4,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class which represents matrix - list of list of parametrized value T
+ * Class which represents matrix - list of list of String
  *
- * @param <T> parameterised type for matrix
  * @author plechowicz
  */
-class Matrix<T> {
+class Matrix {
 
-	private final List<List<T>> matrix;
+	private final List<List<String>> matrix;
 	private final int nrOfRows;
 
-	public Matrix(List<List<T>> matrix) {
+	Matrix(List<List<String>> matrix) {
 		this.matrix = matrix;
 		nrOfRows = matrix.size();
 	}
@@ -24,9 +23,9 @@ class Matrix<T> {
 	 *
 	 * @param row index of row
 	 * @param col index of column
-	 * @return value T
+	 * @return cell
 	 */
-	T getValueAt(int row, int col) {
+	String getValueAt(int row, int col) {
 		if (isInCorrectRange(row, col)) {
 			return matrix.get(row).get(col);
 		}
@@ -37,9 +36,9 @@ class Matrix<T> {
 	 * Gets values in row
 	 *
 	 * @param row index of row
-	 * @return list of values T
+	 * @return list of values
 	 */
-	List<T> getRow(int row) {
+	List<String> getRow(int row) {
 		if (isInCorrectRange(row)) {
 			return matrix.get(row);
 		}
@@ -51,27 +50,27 @@ class Matrix<T> {
 	 *
 	 * @param row index of row
 	 * @param col index of column
-	 * @return list of values T
+	 * @return list of values
 	 */
-	List<T> getRow(int row, int col) {
+	List<String> getRow(int row, int col) {
 		if (isInCorrectRange(row, col)) {
-			List<T> line = matrix.get(row);
+			List<String> line = matrix.get(row);
 			return line.subList(col, line.size());
 		}
 		return null;
 	}
 
 	/**
-	 * Gets value in row, starting from startCol till endCol
+	 * Gets value in row, starting from a startCol till endCol
 	 *
 	 * @param row      index of row
 	 * @param startCol index of starting column
 	 * @param endCol   index of ending column
-	 * @return list of values T
+	 * @return list of values
 	 */
-	List<T> getRow(int row, int startCol, int endCol) {
+	List<String> getRow(int row, int startCol, int endCol) {
 		if (isInCorrectRange(row, startCol, endCol)) {
-			List<T> line = matrix.get(row);
+			List<String> line = matrix.get(row);
 			return line.subList(startCol, endCol);
 		}
 		return null;
@@ -82,12 +81,12 @@ class Matrix<T> {
 	 *
 	 * @param row index of row
 	 * @param col index of column
-	 * @return list of values T
+	 * @return list of values
 	 */
-	List<T> getColumn(int row, int col) {
+	List<String> getColumn(int row, int col) {
 		if (isInCorrectRange(row, col)) {
-			List<T> column = new LinkedList<>();
-			for (List<T> slicedLine : matrix.subList(row, nrOfRows)) {
+			List<String> column = new LinkedList<>();
+			for (List<String> slicedLine : matrix.subList(row, nrOfRows)) {
 				column.add(slicedLine.get(col));
 			}
 			return column;
@@ -101,12 +100,12 @@ class Matrix<T> {
 	 * @param startRow index of starting row
 	 * @param endRow   index of ending row
 	 * @param col      index of column
-	 * @return list of values T
+	 * @return list of values
 	 */
-	List<T> getColumn(int startRow, int endRow, int col) {
+	List<String> getColumn(int startRow, int endRow, int col) {
 		if (isInCorrectRange(startRow, endRow, col, col + 1)) {
-			List<T> column = new LinkedList<>();
-			for (List<T> slicedLine : matrix.subList(startRow, endRow)) {
+			List<String> column = new LinkedList<>();
+			for (List<String> slicedLine : matrix.subList(startRow, endRow)) {
 				column.add(slicedLine.get(col));
 			}
 			return column;
@@ -119,13 +118,13 @@ class Matrix<T> {
 	 *
 	 * @param row index of row
 	 * @param col index of column
-	 * @return list of list of values T
+	 * @return list of list of values
 	 */
-	List<List<T>> getRowsAndCols(int row, int col) {
+	List<List<String>> getRowsAndCols(int row, int col) {
 		if (isInCorrectRange(row, col)) {
-			List<List<T>> slicedMatrix = new LinkedList<>();
-			List<List<T>> rows = matrix.subList(row, nrOfRows);
-			for (List<T> line : rows) {
+			List<List<String>> slicedMatrix = new LinkedList<>();
+			List<List<String>> rows = matrix.subList(row, nrOfRows);
+			for (List<String> line : rows) {
 				slicedMatrix.add(line.subList(col, line.size()));
 			}
 			return slicedMatrix;
@@ -139,13 +138,13 @@ class Matrix<T> {
 	 * @param row      index of row
 	 * @param startCol index of starting column
 	 * @param endCol   index of ending column
-	 * @return list of list of values T
+	 * @return list of list of values
 	 */
-	List<List<T>> getRowsAndColsInRange(int row, int startCol, int endCol) {
+	List<List<String>> getRowsAndColsInRange(int row, int startCol, int endCol) {
 		if (isInCorrectRange(row, startCol, endCol)) {
-			List<List<T>> slicedMatrix = new LinkedList<>();
-			List<List<T>> rows = matrix.subList(row, nrOfRows);
-			for (List<T> line : rows) {
+			List<List<String>> slicedMatrix = new LinkedList<>();
+			List<List<String>> rows = matrix.subList(row, nrOfRows);
+			for (List<String> line : rows) {
 				slicedMatrix.add(line.subList(startCol, endCol));
 			}
 			return slicedMatrix;
@@ -159,13 +158,13 @@ class Matrix<T> {
 	 * @param startRow index of starting row
 	 * @param endRow   index of ending row
 	 * @param startCol index of starting column
-	 * @return list of list of values T
+	 * @return list of list of values
 	 */
-	List<List<T>> getRowsInRangeAndCols(int startRow, int endRow, int startCol) {
+	List<List<String>> getRowsInRangeAndCols(int startRow, int endRow, int startCol) {
 		if (isInCorrectRange(startRow, endRow, startCol, startCol)) {
-			List<List<T>> slicedMatrix = new LinkedList<>();
-			List<List<T>> rows = matrix.subList(startRow, endRow);
-			for (List<T> line : rows) {
+			List<List<String>> slicedMatrix = new LinkedList<>();
+			List<List<String>> rows = matrix.subList(startRow, endRow);
+			for (List<String> line : rows) {
 				slicedMatrix.add(line.subList(startCol, line.size()));
 			}
 			return slicedMatrix;
@@ -180,13 +179,13 @@ class Matrix<T> {
 	 * @param endRow   index of ending row
 	 * @param startCol index of starting column
 	 * @param endCol   index of ending column
-	 * @return list of list of values T
+	 * @return list of list of values
 	 */
-	List<List<T>> getRowsInRangeAndColsInRange(int startRow, int endRow, int startCol, int endCol) {
+	List<List<String>> getRowsInRangeAndColsInRange(int startRow, int endRow, int startCol, int endCol) {
 		if (isInCorrectRange(startRow, endRow, startCol, endCol)) {
-			List<List<T>> slicedMatrix = new LinkedList<>();
-			List<List<T>> rows = matrix.subList(startRow, endRow);
-			for (List<T> line : rows) {
+			List<List<String>> slicedMatrix = new LinkedList<>();
+			List<List<String>> rows = matrix.subList(startRow, endRow);
+			for (List<String> line : rows) {
 				slicedMatrix.add(line.subList(startCol, endCol));
 			}
 			return slicedMatrix;
@@ -218,9 +217,6 @@ class Matrix<T> {
 		if (startRow >= endRow || startCol >= endCol) {
 			return false;
 		}
-		if (startRow >= 0 && endRow <= nrOfRows && startCol >= 0 && endCol <= matrix.get(startRow).size()) {
-			return true;
-		}
-		return false;
+		return (startRow >= 0 && endRow <= nrOfRows && startCol >= 0 && endCol <= matrix.get(startRow).size());
 	}
 }

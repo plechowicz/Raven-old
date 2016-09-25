@@ -7,6 +7,9 @@ import static org.powermock.api.mockito.PowerMockito.doReturn;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.piotrlechowicz.raven.annotations.Parsable;
+import com.github.piotrlechowicz.raven.parsers.DoubleParser;
+import com.github.piotrlechowicz.raven.parsers.IntegerParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,23 +19,21 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.github.piotrlechowicz.raven.annotations.ManyCols;
 import com.github.piotrlechowicz.raven.annotations.ManyRows;
-import com.github.piotrlechowicz.raven.annotations.PositionInFile;
 
 /**
  * @author plechowicz
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(IntegerFlatFileParser.class)
-public class IntegerFlatFileParserTest {
+@PrepareForTest(Raven.class)
+public class RavenTest {
 
-	private final IntegerFlatFileParser flatFileParser = PowerMockito.spy(new IntegerFlatFileParser());
+	private final Raven<ClassToParse> raven = PowerMockito.spy(new Raven<>(ClassToParse.class));
 	private ClassToParse parsedClass;
-
 
 	@Before
 	public void setUp() throws Exception {
-		doReturn(exampleFileContent).when(flatFileParser, "getFileContent", any(String.class));
-		parsedClass = flatFileParser.parseFile(ClassToParse.class, "");
+		doReturn(exampleFileContent).when(raven, "getFileContent", any(String.class));
+		parsedClass = raven.create("");
 	}
 
 	@Test
@@ -51,19 +52,19 @@ public class IntegerFlatFileParserTest {
 
 	@Test
 	public void testOneRowTillEnd() {
-		final int[] result = {8, 7, 6, 5, 4, 3, 2, 1};
+		final Double[] result = {1.1, 1.2};
 		assertEquals(result.length, parsedClass.oneRowTillEnd.size());
 		for (int i = 0; i < result.length; i++) {
-			assertEquals(result[i], (int) parsedClass.oneRowTillEnd.get(i));
+			assertEquals(result[i], parsedClass.oneRowTillEnd.get(i));
 		}
 	}
 
 	@Test
 	public void testOneCol() {
-		final int[] result = {4, 1, 4};
+		final String[] result = {"4", "1", "4"};
 		assertEquals(result.length, parsedClass.oneCol.size());
 		for (int i = 0; i < result.length; i++) {
-			assertEquals(result[i], (int) parsedClass.oneCol.get(i));
+			assertEquals(result[i], parsedClass.oneCol.get(i));
 		}
 	}
 
@@ -90,7 +91,7 @@ public class IntegerFlatFileParserTest {
 
 	@Test
 	public void testMatrixTillEnd() {
-		final int[][] result = {{20}, {2, 3, 4, 5, 6, 7, 8}, {0, 1, 1, 2, 2, 3, 3},
+		final int[][] result = {{2, 3, 4, 5, 6, 7, 8}, {0, 1, 1, 2, 2, 3, 3},
 				{3, 2, 4, 3, 2, 4, 3, 2}, {8, 7, 6, 5, 4, 3, 2, 1},
 				{5, 5, 4, 4, 2, 2, 0, 0}};
 		assertEquals(result.length, parsedClass.matrixTillEnd.size());
@@ -104,7 +105,7 @@ public class IntegerFlatFileParserTest {
 
 
 	private static final List<String> exampleFileContent = new ArrayList<String>() {{
-		add("5 20");
+		add("1.1 1.2");
 		add("1 2 3 4 5 6 7 8");
 		add("0 0 1 1 2 2 3 3");
 		add("4 3 2 4 3 2 4 3 2");
@@ -115,39 +116,39 @@ public class IntegerFlatFileParserTest {
 	public static class ClassToParse {
 
 		//expected 2
-		@PositionInFile(col = 1, row = 1)
+		@Parsable(col = 1, row = 1, parser = IntegerParser.class)
 		int singleValue;
 
 		//expected {1, 2, 2}
-		@PositionInFile(col = 3, row = 2)
+		@Parsable(col = 3, row = 2, parser = IntegerParser.class)
 		@ManyCols(3)
 		List<Integer> oneRow;
 
-		//expected {8, 7, 6, 5, 4, 3, 2, 1}
-		@PositionInFile(col = 1, row = 4)
+		//expected {1.1, 1.2}
+		@Parsable(col = 0, row = 0, parser = DoubleParser.class)
 		@ManyCols
-		List<Integer> oneRowTillEnd;
+		List<Double> oneRowTillEnd;
 
 		//expected {4, 1, 4}
-		@PositionInFile(col = 3, row = 1)
+		@Parsable(col = 3, row = 1)
 		@ManyRows(3)
-		List<Integer> oneCol;
+		List<String> oneCol;
 
 		//expected {3, 4, 3, 2}
-		@PositionInFile(col = 6, row = 2)
+		@Parsable(col = 6, row = 2, parser = IntegerParser.class)
 		@ManyRows
 		List<Integer> oneColTillEnd;
 
 		//expected {{0, 1, 1}, {3, 2, 4}}
-		@PositionInFile(col = 1, row = 2)
+		@Parsable(col = 1, row = 2, parser = IntegerParser.class)
 		@ManyCols(3)
 		@ManyRows(2)
 		List<List<Integer>> matrix;
 
-		//expected {{20}, {2, 3, 4, 5, 6, 7, 8}, {0, 1, 1, 2, 2, 3, 3},
+		//expected {{2, 3, 4, 5, 6, 7, 8}, {0, 1, 1, 2, 2, 3, 3},
 		// {3, 2, 4, 3, 2, 4, 3, 2}, {8, 7, 6, 5, 4, 3, 2, 1},
 		// {5, 5, 4, 4, 2, 2, 0, 0}}
-		@PositionInFile(col = 1, row = 0)
+		@Parsable(col = 1, row = 1, parser = IntegerParser.class)
 		@ManyCols
 		@ManyRows
 		List<List<Integer>> matrixTillEnd;

@@ -9,25 +9,26 @@ For example it can be used to initialize some algorithm's properties and
 instances which are used by it.
 </p>
 
-##Quick start
+##How to use
 
 ######1. Annotate your class
 <p>
-Annotation <code>@PositionInFile</code> denotes that field should be initialized. 
+Annotation <code>@Parsable</code> denotes that field should be initialized. 
 <code>col</code> and <code>row</code> values point to position in a text file.
+<code>parser</code> is necessary if field has to be parsed from String to other type.
 </p>
 
 ```java
 public class Network {
     
-    @PositionInFile(col = 0, row = 0)
+	@Parsable(col = 0, row = 0)
+	private String name;
+	
+    @Parsable(col = 0, row = 1, parser = IntegerParser.class)
     private int nrOfNodes;
     
-    @PositionInFile(col = 1, row = 0)
+    @Parsable(col = 1, row = 1, parser = IntegerParser.class)
     private int nrOfEdges;
-    
-    @PositionInFile(col = 0, row = 1)
-    private int capacity;
     
     ...
 }
@@ -38,22 +39,35 @@ public class Network {
 Create a text file `network1.txt`.
 
 ```
+euro-network
 10 20
 ```
 
-######3. Initialize your class in a code
+######3. Create/initialize your class in a code
+
+To create class in code use `Raven#create(path : String) : T` method.
 
 ```java
 
-import com.github.piotrlechowicz.raven.IntegerFlatFileParser;
+import com.github.piotrlechowicz.raven.Raven;
 ...
             
-IntegerFlatFileParser parser = new IntegerFlatFileParser();
-Network network = parser.parseFile(Network.class, "network1.txt");
+Raven<Network> raven = new Raven(Network.class);
+Network network = raven.create("network1.txt");
 ```
+
+To initialize already create class use `Raven#initialize(instance : T, path : String) : T` method.
     
+```java
+Network network = new Network();
+...
+Raven<Network> raven = new Raven(Network.class);
+raven.initialize(network, "network1.txt");
+```
+
 The fields of instance `network` will have following values:
 ```
+name == "euro-network"
 nrOfNodes == 10
 nrOfEdges == 20
 ```
@@ -62,16 +76,20 @@ nrOfEdges == 20
 
 It is possible to parse list of values using `@ManyCols` and/or `@ManyRows` annotations.
 
+######1. Parsing many columns
+
+To parse many columns use `@ManyCols` annotation.
 ```java
 public class Network {
 ...
-    @PositionInFile(col = 2, row = 3)
+    @Parsable(col = 2, row = 3, parser = IntegerParser.class)
     @ManyCols(5)
     List<Integer> edgeDistances;
 }
 ```
-
-It will initialize this field with 5 values starting from 3rd row and 2nd column, and ending at 6th column.
+<p>
+It will initialize this field with 5 values starting from 3rd row and 2nd column,
+ and ending at 6th column.</p>
 
 Parsed values are marked bold in a file:
 
@@ -82,70 +100,77 @@ Parsed values are marked bold in a file:
 1 1 1 2  2  2  3  3  3
 </pre>
 
-TODO: finish description of @ManyCols and @ManyRows
+######2. Parsing many rows
+<p>
+To parse many rows use `@ManyRows` annotation. 
+If no argument is passed to `@ManyCols` or `@ManyRows`,
+it means that all values till last row/column should be taken.
+</p>
 
-##Parsing different types
-
-If class contains different types of field, two approaches can be used.
-
-######1. Parsing Strings
-
-Parsing all values to some class as Strings and after that converting them as necessary
-
-Create a class:
-    
 ```java
-public class NetworkRaw {
-    @PositionInFile(col = 0, row = 0)
-    String name;
-    
-    @PositionInFile(col = 0; row = 1)
-    String nrOfNodes;
-     
-    @PositionInFile(col = 1; row = 1)
-    String nrOfEdges;
-    
-    ...
-    }
+public class Demands {
+	@Parsable(row = 1, col = 1, coverter = IntegerParser.class)
+	@ManyRows
+	private List<Integer> destinationNodes;
+}
 ```
+<p>
+It will initialize field with list of integers, 
+starting from 1st row and 1st column, and ending on last row.</p>
 
-Create a text file network1.txt.
-    
-```
-EuroNetwork
-10 20
-```
+Parsed values are marked bold in a file:
 
-And use `StringFlatFileParser(NetworkRaw.class, "network1.txt")` to create instance of `NetworkRaw`. <br/>
-Write a factory/provide constructor/etc. which will convert `NetworkRaw` into `Network`.
+<pre>
+1 5 20
+2 <b>4</b> 18
+2 <b>6</b> 10
+1 <b>2</b> 15
+9 <b>8</b> 4
+</pre>
 
-######2. Parsing Objects
+######3. Parsing matrix
+<p>
+It is possible to initialize matrix of values (<code>List&lt;List&lt;?&gt;&gt;</code>) using at the same time
+<code>@ManyCols</code> and <code>@ManyRows</code> annotations.
+</p>
 
-Extend class `FlatFileParser` for `Object` type and implement method `createMatrixOfValues(List<String> rawFileContent): List<List<Object>>`. <br/>
+##Using parsers
 
-Depending on the row, it should parse value to correct format.
-    
+<p>
+Fields of different type than String can be parsed with parsers. 
+There is provided set of basic parsers in 
+<code>com.github.piotrlechowicz.raven.parsers</code> package:
+</p>
+
+ * IntegerParser
+ * FloatParser
+ * DoubleParser
+ * BooleanParser
+ * ByteParser
+
+<p>
+To use certain parser, it has to be specified in <code>@Parsable</code> annotation 
+by setting <code>parser</code> value. For example to use <code>BooleanParser</code> 
+field should be annotated in the following way:
+
 ```java
-public class NetworkFlatFileParser extends FlatFileParser<Object> {
-    
+@Parsable(parser = BooleanParser.class)
+Boolean booleanValue;
+```
+
+######Creating new parsers
+<p>
+New parsers can be created to parse other types. 
+In order to do this <code>Parser&lt;T&gt;</code> interface has to be extended.
+It contains abstract method <code>parse(input : String) : T</code> 
+which determines how the input String will be parsed to desired value <code>T</code>. 
+</p>
+
+```java
+public class MyParser implements Parser<String> {
     @Override
-    protected List<List<Object>> createMatrixOfValues(List<String> rawFileContent) {
-        List<List<Object>> result = new ArrayList<>();
-        for (int i = 0; i < rawFileContent.size(); i++) {
-            String line = rawFileContent.get(i);
-            if (i == 1) {
-                List<Object> row = new ArrayList<>();
-                Scanner scanner = new Scanner(line);
-                while(scanner.hasNextInt()) {
-                    row.add(scanner.nextInt());
-                }
-                result.add(row);
-            } else {
-                String[] split = line.split("\\s+");
-                result.add(Arrays.asList(split));
-            }
-        }
-        return result;
+    public String parse(String input) {
+        return input.substring(0, 2); 
     }
 }
 ```

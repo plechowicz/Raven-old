@@ -6,7 +6,7 @@
 
     <groupId>com.github.piotrlechowicz</groupId>
     <artifactId>raven</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <name>Raven</name>
 
@@ -20,12 +20,12 @@
 	<distributionManagement>
 		<repository>
 			<id>armadillo</id>
-			<name>GitHub Artifactory Releases Maven Repository</name>
+			<name>GitHub Armadillo Releases Maven Repository</name>
 			<url>https://github.com/piotrlechowicz/armadillo/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>armadillo-snapshots</id>
-			<name>GitHub Artifactory Snapshot Maven Repository</name>
+			<name>GitHub Armadillo Snapshot Maven Repository</name>
 			<url>https://github.com/piotrlechowicz/armadillo/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
