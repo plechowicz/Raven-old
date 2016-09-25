@@ -1,15 +1,21 @@
 # Raven
-**Initializes class fields with values provided in an external text file.**
+**Raven initializes class's fields with values provided in an external text file.**
 
 <p>
-Contains field annotations that points which value/values from text file 
-should be used to initialize that field. 
-Different instances can be initialized with different text files.
-For example it can be used to initialize some algorithm's properties and 
-instances which are used by it.
+Java tool which allows to initialize class with values stored in a text file.
+Values in a text file are refered from classes based on field annotations. 
+It is useful where there is necessity to parse huge number of files with different structure.
 </p>
 
-##How to use
+* [Getting started](#getting-started)
+* [Text files](#text-files)
+* [Parsing list of values](#parsing-list-of-values)
+* [Parsers](#parsers)
+* [Using parsers for other types than Strings](#using-parsers-for-other-types-than-strings)
+* [Motivation](#motivation)
+* [Installation](#installation)
+
+## Getting started
 
 ######1. Annotate your class
 <p>
@@ -65,12 +71,34 @@ Raven<Network> raven = new Raven(Network.class);
 raven.initialize(network, "network1.txt");
 ```
 
-The fields of instance `network` will have following values:
+In both cases the fields of instance `network` will have following values:
 ```
-name == "euro-network"
-nrOfNodes == 10
-nrOfEdges == 20
+name : "euro-network"
+nrOfNodes : 10
+nrOfEdges : 20
 ```
+
+## Text files
+
+<p>
+Text files is considered as two dimensional grid, where columns are separated with space sign
+and rows are separated with return sign. The indices are counted from top left corner, starting
+from value 0.
+</p>
+
+If text file has following form:
+
+<pre>
+00 01 02 03 04
+10 11 12 13 14
+20 21 22
+30 31 32
+</pre>
+
+<p>
+then coordinates (2nd row, 1st col) refers to value 21. 
+File can contain different number of columns in each row.
+</p>
 
 ##Parsing list of values
 
@@ -134,7 +162,7 @@ It is possible to initialize matrix of values (<code>List&lt;List&lt;?&gt;&gt;</
 <code>@ManyCols</code> and <code>@ManyRows</code> annotations.
 </p>
 
-##Using parsers
+## Using parsers for other types than Strings
 
 <p>
 Fields of different type than String can be parsed with parsers. 
@@ -158,7 +186,7 @@ field should be annotated in the following way:
 Boolean booleanValue;
 ```
 
-######Creating new parsers
+###### Creating new parsers
 <p>
 New parsers can be created to parse other types. 
 In order to do this <code>Parser&lt;T&gt;</code> interface has to be extended.
@@ -174,3 +202,36 @@ public class MyParser implements Parser<String> {
     }
 }
 ```
+
+## Motivation
+
+<p>
+Creation of algorithm with huge number of input files, configurations and properties can 
+be a little overwhelming. Raven was created as a tool to minimize necessary effort to
+writing text file parsers. It provides easy to use mechanism with annotations.
+</p>
+
+## Installation
+
+<p>
+The project can be downloaded from Maven repository. 
+In your pom.xml file you have to add the following repository and dependency.
+</p>
+
+```
+<repositories>
+    <repository>
+        <id>armadillo</id>
+        <name>GitHub Armadillo Repository</name>
+        <url>https://github.com/piotrlechowicz/armadillo</url>
+    </repository>
+</repositories>
+...
+<dependencies>
+    <dependency>
+        <groupId>com.github.piotrlechowicz</groupId>
+        <artifactId>raven</artifactId>
+        <version>1.1</version>
+    </dependency>
+</dependencies>
+``` 
