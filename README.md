@@ -152,7 +152,7 @@ There is provided set of basic parsers in
 To use certain parser, it has to be specified in <code>@Parsable</code> annotation 
 by setting <code>parser</code> value. For example to use <code>BooleanParser</code> 
 field should be annotated in the following way:
-
+</p>
 ```java
 @Parsable(parser = BooleanParser.class)
 Boolean booleanValue;
