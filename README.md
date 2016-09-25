@@ -117,7 +117,8 @@ public class Network {
 ```
 <p>
 It will initialize this field with 5 values starting from 3rd row and 2nd column,
- and ending at 6th column.</p>
+and ending at 6th column.
+</p>
 
 Parsed values are marked bold in a file:
 
@@ -145,7 +146,7 @@ public class Demands {
 <p>
 It will initialize field with list of integers, 
 starting from 1st row and 1st column, and ending on last row.</p>
-
+</p>
 Parsed values are marked bold in a file:
 
 <pre>
@@ -180,6 +181,7 @@ There is provided set of basic parsers in
 To use certain parser, it has to be specified in <code>@Parsable</code> annotation 
 by setting <code>parser</code> value. For example to use <code>BooleanParser</code> 
 field should be annotated in the following way:
+</p>
 
 ```java
 @Parsable(parser = BooleanParser.class)
