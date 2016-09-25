@@ -220,7 +220,7 @@ The project can be downloaded from Maven repository.
 In your pom.xml file you have to add the following repository and dependency.
 </p>
 
-```
+```xml
 <repositories>
     <repository>
         <id>armadillo</id>
