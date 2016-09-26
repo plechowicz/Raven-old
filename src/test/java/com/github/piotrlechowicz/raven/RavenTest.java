@@ -106,11 +106,11 @@ public class RavenTest {
 
 	private static final List<String> exampleFileContent = new ArrayList<String>() {{
 		add("1.1 1.2");
-		add("1 2 3 4 5 6 7 8");
+		add(" 1 2 3 4 5 6 7 8");
 		add("0 0 1 1 2 2 3 3");
-		add("4 3 2 4 3 2 4 3 2");
+		add(" 4 3 2 4 3 2 4 3 2");
 		add("9 8 7 6 5 4 3 2 1");
-		add("6 5 5 4 4 2 2 0 0");
+		add(" 6 5 5 4 4 2 2 0 0");
 	}};
 
 	public static class ClassToParse {

@@ -120,7 +120,8 @@ public class Raven<T> {
 	private List<List<String>> createMatrixOfValues(List<String> rawFileContent) {
 		List<List<String>> matrix = new ArrayList<>();
 		for (String line : rawFileContent) {
-			String[] split = line.split("\\s+");
+			String trimed = line.trim();
+			String[] split = trimed.split("\\s+");
 			matrix.add(Arrays.asList(split));
 		}
 		return matrix;
