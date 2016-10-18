@@ -55,7 +55,7 @@ To create class in code use `Raven#create(path : String) : T` method.
 
 ```java
 
-import com.github.piotrlechowicz.raven.Raven;
+import com.github.piotrlechowicz.raven.FlatFileReader;
 ...
             
 Raven<Network> raven = new Raven(Network.class);

@@ -24,16 +24,16 @@ import com.github.piotrlechowicz.raven.annotations.ManyRows;
  * @author plechowicz
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Raven.class)
-public class RavenTest {
+@PrepareForTest(FlatFileReader.class)
+public class FlatFileReaderTest {
 
-	private final Raven<ClassToParse> raven = PowerMockito.spy(new Raven<>(ClassToParse.class));
+	private final FlatFileReader<ClassToParse> flatFileReader = PowerMockito.spy(new FlatFileReader<>(ClassToParse.class));
 	private ClassToParse parsedClass;
 
 	@Before
 	public void setUp() throws Exception {
-		doReturn(exampleFileContent).when(raven, "getFileContent", any(String.class));
-		parsedClass = raven.create("");
+		doReturn(exampleFileContent).when(flatFileReader, "getFileContent", any(String.class));
+		parsedClass = flatFileReader.create("");
 	}
 
 	@Test

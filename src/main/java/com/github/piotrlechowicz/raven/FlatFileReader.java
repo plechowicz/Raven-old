@@ -23,8 +23,8 @@ import java.util.List;
  * Fields which should be initialized have to be annotated with {@link Parsable}
  * </p>
  * <p>
- * To create new instance of class, use method {@link Raven#create(String)}.<br/>
- * To initialize already existing instance, use method {@link Raven#initialize(Object, String)}.
+ * To create new instance of class, use method {@link FlatFileReader#create(String)}.<br/>
+ * To initialize already existing instance, use method {@link FlatFileReader#initialize(Object, String)}.
  * </p>
  * <b>Example:</b><br/>
  * <br/>
@@ -41,8 +41,8 @@ import java.util.List;
  *       int value;
  *   }}
  * </pre>
- * After invoking {@link Raven#create(String)} where argument points to location of the text file, the instance
- * of "{@code Raven}" class will be created and the field "{@code value}" will be set to 6.
+ * After invoking {@link FlatFileReader#create(String)} where argument points to location of the text file, the instance
+ * of "{@code FlatFileReader}" class will be created and the field "{@code value}" will be set to 6.
  * </p>
  * <p>
  * To parse a list of values instead of a single value, use annotations {@link ManyCols} and/or {@link ManyRows}
@@ -51,9 +51,9 @@ import java.util.List;
  * @param <T> Class which will be created/initialized with the parser
  * @author Piotr Lechowicz
  */
-public class Raven<T> {
+public class FlatFileReader<T> {
 
-	private static final Logger log = Logger.getLogger(Raven.class);
+	private static final Logger log = Logger.getLogger(FlatFileReader.class);
 
 	private final Class<T> clazz;
 
@@ -64,7 +64,7 @@ public class Raven<T> {
 	/**
 	 * @param clazz Class which instances will be created
 	 */
-	public Raven(Class<T> clazz) {
+	public FlatFileReader(Class<T> clazz) {
 		this.clazz = clazz;
 	}
 
@@ -76,7 +76,7 @@ public class Raven<T> {
 	 * @return initialized instance of class
 	 * @throws IOException when file does not exist
 	 */
-	public final T create(String path) throws IOException {
+	public T create(String path) throws IOException {
 
 		this.t = getNewInstance(clazz);
 
@@ -92,7 +92,7 @@ public class Raven<T> {
 	 * @return initialized instance
 	 * @throws IOException when file does not exist
 	 */
-	public final T initialize(T instance, String path) throws IOException {
+	public T initialize(T instance, String path) throws IOException {
 		this.t = instance;
 
 		return parseFile(path);
@@ -120,8 +120,8 @@ public class Raven<T> {
 	private List<List<String>> createMatrixOfValues(List<String> rawFileContent) {
 		List<List<String>> matrix = new ArrayList<>();
 		for (String line : rawFileContent) {
-			String trimed = line.trim();
-			String[] split = trimed.split("\\s+");
+			String trimmed = line.trim();
+			String[] split = trimmed.split("\\s+");
 			matrix.add(Arrays.asList(split));
 		}
 		return matrix;
