@@ -12,7 +12,6 @@ import java.util.List;
 public class FlatFileSaver {
 
 	protected File file;
-	private boolean newFileCreated;
 
 	public FlatFileSaver(String path) throws IOException {
 		this(path, false);
@@ -22,9 +21,9 @@ public class FlatFileSaver {
 		file = new File(path);
 		file.getParentFile().mkdirs();
 
-		if (!file.exists() || !append) {
+		if (!append && file.exists()) {
+			file.delete();
 			file.createNewFile();
-			newFileCreated = true;
 		}
 	}
 
@@ -38,10 +37,6 @@ public class FlatFileSaver {
 		try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
 			fileRows.stream().forEach(element -> writer.println(formatFileRow(element)));
 		}
-	}
-
-	public boolean isNewFileCreated() {
-		return newFileCreated;
 	}
 
 	private String formatFileRow(FileRow fileRow) {
