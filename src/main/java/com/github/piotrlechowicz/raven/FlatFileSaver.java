@@ -33,6 +33,12 @@ public class FlatFileSaver {
 		}
 	}
 
+	public void save(String line) throws IOException {
+		try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
+			writer.println(line);
+		}
+	}
+
 	public void save(List<? extends FileRow> fileRows) throws IOException {
 		try (PrintWriter writer = new PrintWriter(new FileWriter(file, true))) {
 			fileRows.stream().forEach(element -> writer.println(formatFileRow(element)));
