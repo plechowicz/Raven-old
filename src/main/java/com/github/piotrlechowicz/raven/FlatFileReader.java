@@ -16,40 +16,41 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Creates class instance and initializes fields based on provided text file and annotations.<br/>
+ * Creates class instance and initializes fields based on provided text file and annotations.<br>
  * Text file should be in the shape of matrix (two dimensional array) where columns are separated
- * with spaces and rows are separated with return sign.<br/>
+ * with spaces and rows are separated with return sign.<br>
  * <p>
- * Fields which should be initialized have to be annotated with {@link Parsable}
+ * Fields which should be initialized have to be annotated with {@link com.github.piotrlechowicz.raven.annotations.Parsable}
  * </p>
  * <p>
- * To create new instance of class, use method {@link FlatFileReader#create(String)}.<br/>
- * To initialize already existing instance, use method {@link FlatFileReader#initialize(Object, String)}.
+ * To create new instance of class, use method {@link com.github.piotrlechowicz.raven.FlatFileReader#create(String)}.<br>
+ * To initialize already existing instance, use method {@link com.github.piotrlechowicz.raven.FlatFileReader#initialize(Object, String)}.
  * </p>
- * <b>Example:</b><br/>
- * <br/>
- * Text file has following structure:<br/>
+ * <b>Example:</b><br>
+ * <br>
+ * Text file has following structure:<br>
  * <pre>
  * 1 2 3
  * 4 5 6
- *     </pre>
+ * </pre>
  * <p>
- * There is created a class:<br/>
+ * There is created a class:<br>
  * <pre>{@code
  *   public class ExampleClass {
+ *
  *      @literal @Parsable(row = 1, col = 2, parser = IntegerParser.class)
  *       int value;
  *   }}
  * </pre>
- * After invoking {@link FlatFileReader#create(String)} where argument points to location of the text file, the instance
+ * After invoking {@link com.github.piotrlechowicz.raven.FlatFileReader#create(String)} where argument points to location of the text file, the instance
  * of "{@code FlatFileReader}" class will be created and the field "{@code value}" will be set to 6.
  * </p>
  * <p>
- * To parse a list of values instead of a single value, use annotations {@link ManyCols} and/or {@link ManyRows}
+ * To parse a list of values instead of a single value, use annotations {@link com.github.piotrlechowicz.raven.annotations.ManyCols} and/or {@link com.github.piotrlechowicz.raven.annotations.ManyRows}
  * </p>
- *
  * @param <T> Class which will be created/initialized with the parser
  * @author Piotr Lechowicz
+ * @version $Id: $Id
  */
 public class FlatFileReader<T> {
 
@@ -62,6 +63,8 @@ public class FlatFileReader<T> {
 	private Matrix matrix;
 
 	/**
+	 * <p>Constructor for FlatFileReader.</p>
+	 *
 	 * @param clazz Class which instances will be created
 	 */
 	public FlatFileReader(Class<T> clazz) {
@@ -74,7 +77,7 @@ public class FlatFileReader<T> {
 	 *
 	 * @param path path of text file
 	 * @return initialized instance of class
-	 * @throws IOException when file does not exist
+	 * @throws java.io.IOException when file does not exist
 	 */
 	public T create(String path) throws IOException {
 
@@ -90,7 +93,7 @@ public class FlatFileReader<T> {
 	 * @param instance Instance which is going to be initialized
 	 * @param path     path of text file
 	 * @return initialized instance
-	 * @throws IOException when file does not exist
+	 * @throws java.io.IOException when file does not exist
 	 */
 	public T initialize(T instance, String path) throws IOException {
 		this.t = instance;

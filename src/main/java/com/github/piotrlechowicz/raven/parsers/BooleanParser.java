@@ -1,14 +1,16 @@
 package com.github.piotrlechowicz.raven.parsers;
 
 /**
- * Parses string to boolean value.<br/>
- * "True", "TRUE", "true", "t", "yes", "y" are parsed to true </br>
+ * Parses string to boolean value.<br>
+ * "True", "TRUE", "true", "t", "yes", "y" are parsed to true <br>
  * other are parsed to false.
  *
  * @author Piotr Lechowicz
+ * @version $Id: $Id
  */
 public class BooleanParser implements Parser<Boolean> {
 
+	/** {@inheritDoc} */
 	@Override
 	public Boolean parse(String input) {
 		if (input == null) {

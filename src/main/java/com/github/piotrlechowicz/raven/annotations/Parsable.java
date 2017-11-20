@@ -12,9 +12,9 @@ import java.lang.annotation.Target;
 /**
  * Annotates position of a value of a field in provided text file
  * <br><br>
- * {@link Parsable#row()} defines row in text file <br/>
- * {@link Parsable#col()} defines col in text file<br/>
- * {@link Parsable#parser()} defines to which type field should be converted from String value<br/>
+ * {@link com.github.piotrlechowicz.raven.annotations.Parsable#row()} defines row in text file <br>
+ * {@link com.github.piotrlechowicz.raven.annotations.Parsable#col()} defines col in text file<br>
+ * {@link com.github.piotrlechowicz.raven.annotations.Parsable#parser()} defines to which type field should be converted from String value<br>
  * <p>
  * <br>
  * To point which value from the text file should be used, provide {@code row} and {@code col} values. </br>
@@ -35,6 +35,7 @@ import java.lang.annotation.Target;
  * Example class :
  * <pre>
  * {@code public class ... {
+ *
  *      @literal @Parsable(col = 1, row = 3)
  *       String value;
  *   }
@@ -44,8 +45,8 @@ import java.lang.annotation.Target;
  * Denotes that field "{@code value}" will be initialized with a value {@code "8"} (1st column, 3st row in a file).
  * <p>
  * </p>
- *
  * @author Piotr Lechowicz
+ * @version $Id: $Id
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

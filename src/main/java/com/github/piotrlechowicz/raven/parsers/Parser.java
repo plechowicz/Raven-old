@@ -5,6 +5,7 @@ package com.github.piotrlechowicz.raven.parsers;
  *
  * @param <T> type of field
  * @author Piotr Lechowicz
+ * @version $Id: $Id
  */
 public interface Parser<T> {
 

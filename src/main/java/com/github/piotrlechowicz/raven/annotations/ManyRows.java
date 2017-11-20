@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  * be parsed from a starting position till the last row.
  *
  * @author Piotr Lechowicz
+ * @version $Id: $Id
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)

@@ -21,7 +21,11 @@ import com.github.piotrlechowicz.raven.annotations.ManyCols;
 import com.github.piotrlechowicz.raven.annotations.ManyRows;
 
 /**
+ * <p>FlatFileReaderTest class.</p>
+ *
  * @author plechowicz
+ * @version $Id: $Id
+ * @since 1.0
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(FlatFileReader.class)
@@ -29,18 +33,32 @@ public class FlatFileReaderTest {
 
 	private final FlatFileReader<ClassToParse> flatFileReader = PowerMockito.spy(new FlatFileReader<>(ClassToParse.class));
 	private ClassToParse parsedClass;
+	private ClassToParse parsedClassWithEmptyContent;
 
+	/**
+	 * <p>setUp.</p>
+	 *
+	 * @throws java.lang.Exception if any.
+	 */
 	@Before
 	public void setUp() throws Exception {
-		doReturn(exampleFileContent).when(flatFileReader, "getFileContent", any(String.class));
-		parsedClass = flatFileReader.create("");
+		doReturn(exampleFileContent).when(flatFileReader, "getFileContent", "exampleFileContent");
+		doReturn(exampleFileWithEmptyContent).when(flatFileReader, "getFileContent", "exampleFileWithEmptyContent");
+		parsedClass = flatFileReader.create("exampleFileContent");
+		parsedClassWithEmptyContent = flatFileReader.create("exampleFileWithEmptyContent");
 	}
 
+	/**
+	 * <p>testSingleCell.</p>
+	 */
 	@Test
 	public void testSingleCell() {
 		assertEquals(2, parsedClass.singleValue);
 	}
 
+	/**
+	 * <p>testOneRow.</p>
+	 */
 	@Test
 	public void testOneRow() {
 		final int[] result = {1, 2, 2};
@@ -50,6 +68,9 @@ public class FlatFileReaderTest {
 		}
 	}
 
+	/**
+	 * <p>testOneRowTillEnd.</p>
+	 */
 	@Test
 	public void testOneRowTillEnd() {
 		final Double[] result = {1.1, 1.2};
@@ -59,6 +80,9 @@ public class FlatFileReaderTest {
 		}
 	}
 
+	/**
+	 * <p>testOneCol.</p>
+	 */
 	@Test
 	public void testOneCol() {
 		final String[] result = {"4", "1", "4"};
@@ -68,6 +92,9 @@ public class FlatFileReaderTest {
 		}
 	}
 
+	/**
+	 * <p>testOneColTillEnd.</p>
+	 */
 	@Test
 	public void testOneColTillEnd() {
 		final int[] result = {3, 4, 3, 2};
@@ -77,6 +104,9 @@ public class FlatFileReaderTest {
 		}
 	}
 
+	/**
+	 * <p>testMatrix.</p>
+	 */
 	@Test
 	public void testMatrix() {
 		final int[][] result = {{0, 1, 1}, {3, 2, 4}};
@@ -89,6 +119,9 @@ public class FlatFileReaderTest {
 		}
 	}
 
+	/**
+	 * <p>testMatrixTillEnd.</p>
+	 */
 	@Test
 	public void testMatrixTillEnd() {
 		final int[][] result = {{2, 3, 4, 5, 6, 7, 8}, {0, 1, 1, 2, 2, 3, 3},
@@ -103,6 +136,11 @@ public class FlatFileReaderTest {
 		}
 	}
 
+	@Test
+	public void shouldNotFailOnEmptyContent() {
+
+	}
+
 
 	private static final List<String> exampleFileContent = new ArrayList<String>() {{
 		add("1.1 1.2");
@@ -112,6 +150,13 @@ public class FlatFileReaderTest {
 		add("9 8 7 6 5 4 3 2 1");
 		add(" 6 5 5 4 4 2 2 0 0");
 	}};
+
+	private static final List<String> exampleFileWithEmptyContent = new ArrayList<String>() {
+		{
+			add("1.1 1.0");
+			add("1 2");
+		}
+	};
 
 	public static class ClassToParse {
 

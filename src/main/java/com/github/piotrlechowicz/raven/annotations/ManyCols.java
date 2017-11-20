@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  * that the field should be parsed from a starting position till the last column.
  *
  * @author Piotr Lechowicz
+ * @version $Id: $Id
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
