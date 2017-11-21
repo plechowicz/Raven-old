@@ -48,6 +48,7 @@ import java.util.List;
  * <p>
  * To parse a list of values instead of a single value, use annotations {@link com.github.piotrlechowicz.raven.annotations.ManyCols} and/or {@link com.github.piotrlechowicz.raven.annotations.ManyRows}
  * </p>
+ *
  * @param <T> Class which will be created/initialized with the parser
  * @author Piotr Lechowicz
  * @version $Id: $Id

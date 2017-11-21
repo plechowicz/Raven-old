@@ -1,12 +1,7 @@
 package com.github.piotrlechowicz.raven;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.powermock.api.mockito.PowerMockito.doReturn;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.github.piotrlechowicz.raven.annotations.ManyCols;
+import com.github.piotrlechowicz.raven.annotations.ManyRows;
 import com.github.piotrlechowicz.raven.annotations.Parsable;
 import com.github.piotrlechowicz.raven.parsers.DoubleParser;
 import com.github.piotrlechowicz.raven.parsers.IntegerParser;
@@ -17,8 +12,12 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.github.piotrlechowicz.raven.annotations.ManyCols;
-import com.github.piotrlechowicz.raven.annotations.ManyRows;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
 
 /**
  * <p>FlatFileReaderTest class.</p>
@@ -33,7 +32,6 @@ public class FlatFileReaderTest {
 
 	private final FlatFileReader<ClassToParse> flatFileReader = PowerMockito.spy(new FlatFileReader<>(ClassToParse.class));
 	private ClassToParse parsedClass;
-	private ClassToParse parsedClassWithEmptyContent;
 
 	/**
 	 * <p>setUp.</p>
@@ -42,10 +40,8 @@ public class FlatFileReaderTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		doReturn(exampleFileContent).when(flatFileReader, "getFileContent", "exampleFileContent");
-		doReturn(exampleFileWithEmptyContent).when(flatFileReader, "getFileContent", "exampleFileWithEmptyContent");
-		parsedClass = flatFileReader.create("exampleFileContent");
-		parsedClassWithEmptyContent = flatFileReader.create("exampleFileWithEmptyContent");
+		doReturn(exampleFileContent).when(flatFileReader, "getFileContent", any(String.class));
+		parsedClass = flatFileReader.create("");
 	}
 
 	/**
@@ -136,12 +132,6 @@ public class FlatFileReaderTest {
 		}
 	}
 
-	@Test
-	public void shouldNotFailOnEmptyContent() {
-
-	}
-
-
 	private static final List<String> exampleFileContent = new ArrayList<String>() {{
 		add("1.1 1.2");
 		add(" 1 2 3 4 5 6 7 8");
@@ -150,13 +140,6 @@ public class FlatFileReaderTest {
 		add("9 8 7 6 5 4 3 2 1");
 		add(" 6 5 5 4 4 2 2 0 0");
 	}};
-
-	private static final List<String> exampleFileWithEmptyContent = new ArrayList<String>() {
-		{
-			add("1.1 1.0");
-			add("1 2");
-		}
-	};
 
 	public static class ClassToParse {
 
