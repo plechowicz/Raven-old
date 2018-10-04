@@ -1,9 +1,12 @@
 package com.github.piotrlechowicz.raven;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.IllegalFormatException;
 import java.util.List;
 
 /**
@@ -13,6 +16,8 @@ import java.util.List;
  * @version $Id: $Id
  */
 public class FlatFileSaver {
+
+	private static final Logger log = Logger.getLogger(FlatFileSaver.class);
 
 	private static final String DEFAULT_DELIMITER = " ";
 
@@ -30,7 +35,6 @@ public class FlatFileSaver {
 	}
 
 	/**
-	 *
 	 * @param path
 	 * @param delimiter
 	 * @throws IOException
@@ -42,7 +46,7 @@ public class FlatFileSaver {
 	/**
 	 * <p>Constructor for FlatFileSaver.</p>
 	 *
-	 * @param path a {@link java.lang.String} object.
+	 * @param path   a {@link java.lang.String} object.
 	 * @param append a boolean.
 	 * @throws java.io.IOException if any.
 	 */
@@ -51,7 +55,6 @@ public class FlatFileSaver {
 	}
 
 	/**
-	 *
 	 * @param path
 	 * @param append
 	 * @param delimiter
@@ -104,10 +107,14 @@ public class FlatFileSaver {
 		}
 	}
 
-	private String formatFileRow(FileRow fileRow) {
+	private String formatFileRow(FileRow fileRow) throws IllegalRowFormatException {
 		StringBuilder builder = new StringBuilder(100);
-		for(int i = 0; i < fileRow.getNumberOfValues(); i++) {
-			builder.append(String.format(fileRow.getFormatAt(i), fileRow.getValueAt(i)));
+		for (int i = 0; i < fileRow.getNumberOfValues(); i++) {
+			try {
+				builder.append(String.format(fileRow.getFormatAt(i), fileRow.getValueAt(i)));
+			} catch (IllegalFormatException e) {
+				throw new IllegalRowFormatException("error in row=" + i, e, i);
+			}
 			builder.append(delimiter);
 		}
 		return builder.toString();
