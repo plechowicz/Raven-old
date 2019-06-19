@@ -27,4 +27,13 @@ public interface FileRow {
 	 * @return a {@link java.lang.String} object.
 	 */
 	String getFormatAt(int row);
+
+	/**
+	 * Optionally provide an error message
+	 * @param row a int
+	 * @return String description
+	 */
+	default String getErrorDescriptionAt(int row) {
+		return "";
+	};
 }

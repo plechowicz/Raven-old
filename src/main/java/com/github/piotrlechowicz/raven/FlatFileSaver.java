@@ -113,7 +113,7 @@ public class FlatFileSaver {
 			try {
 				builder.append(String.format(fileRow.getFormatAt(i), fileRow.getValueAt(i)));
 			} catch (IllegalFormatException e) {
-				throw new IllegalRowFormatException("error in row=" + i, e, i);
+				throw new IllegalRowFormatException("error in row=" + i + ", errorDescription=" + fileRow.getErrorDescriptionAt(i), e, i);
 			}
 			builder.append(delimiter);
 		}
