@@ -11,6 +11,6 @@ public class IntegerParser implements Parser<Integer> {
 	/** {@inheritDoc} */
 	@Override
 	public Integer parse(String input) {
-		return Integer.parseInt(input);
+		return input.isEmpty() ? null : Integer.parseInt(input);
 	}
 }
