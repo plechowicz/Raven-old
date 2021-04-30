@@ -17,7 +17,7 @@ It is useful where there is necessity to parse huge number of files with differe
 
 ## Getting started
 
-######1. Annotate your class
+###### 1. Annotate your class
 <p>
 Annotation <code>@Parsable</code> denotes that field should be initialized. 
 <code>col</code> and <code>row</code> values point to position in a text file.
@@ -40,7 +40,7 @@ public class Network {
 }
 ```
 
-######2. Create a text file 
+###### 2. Create a text file 
 
 Create a text file `network1.txt`.
 
@@ -49,7 +49,7 @@ euro-network
 10 20
 ```
 
-######3. Create/initialize your class in a code
+###### 3. Create/initialize your class in a code
 
 To create class in code use `Raven#create(path : String) : T` method.
 
@@ -62,7 +62,7 @@ Raven<Network> raven = new Raven(Network.class);
 Network network = raven.create("network1.txt");
 ```
 
-To initialize already create class use `Raven#initialize(instance : T, path : String) : T` method.
+To initialize already created class use `Raven#initialize(instance : T, path : String) : T` method.
     
 ```java
 Network network = new Network();
@@ -129,7 +129,7 @@ Parsed values are marked bold in a file:
 1 1 1 2  2  2  3  3  3
 </pre>
 
-######2. Parsing many rows
+###### 2. Parsing many rows
 <p>
 To parse many rows use `@ManyRows` annotation. 
 If no argument is passed to `@ManyCols` or `@ManyRows`,
@@ -157,7 +157,7 @@ Parsed values are marked bold in a file:
 9 <b>8</b> 4
 </pre>
 
-######3. Parsing matrix
+###### 3. Parsing matrix
 <p>
 It is possible to initialize matrix of values (<code>List&lt;List&lt;?&gt;&gt;</code>) using at the same time
 <code>@ManyCols</code> and <code>@ManyRows</code> annotations.
