@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.javasour</groupId>
-    <artifactId>raven</artifactId>
+    <artifactId>raven-old</artifactId>
     <version>1.2</version>
     <packaging>jar</packaging>
     <name>Raven</name>
@@ -34,7 +34,7 @@
         <junit.version>4.4</junit.version>
         <log4j.version>1.2.17</log4j.version>
         <mockito.version>2.23.4</mockito.version>
-        <powermock.version>2.0.0-beta.5</powermock.version>
+        <powermock.version>2.0.9</powermock.version>
         <commons-io.version>2.4</commons-io.version>
     </properties>
 
@@ -105,18 +105,18 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-source-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>attach-sources</id>-->
+<!--                        <goals>-->
+<!--                            <goal>jar</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
