@@ -19,9 +19,8 @@
 
     <distributionManagement>
         <repository>
-            <id>javasour</id>
-            <name>Javasour Public Repository</name>
-            <url>scp://www.javasour.com/home/users/plechowicz/maven_repository/public/releases/</url>
+            <id>armadillo</id>
+            <url>https://maven.pkg.github.com/javasour/armadillo</url>
         </repository>
     </distributionManagement>
 
